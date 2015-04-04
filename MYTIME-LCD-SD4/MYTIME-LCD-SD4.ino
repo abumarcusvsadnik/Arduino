@@ -1,5 +1,3 @@
-
-
 // include the LCD library:
 #include <LiquidCrystal.h>
 #include <Wire.h>
