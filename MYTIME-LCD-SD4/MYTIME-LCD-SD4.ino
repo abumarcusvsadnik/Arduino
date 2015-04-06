@@ -1,4 +1,12 @@
+#include <dht.h>
+
+#include <DRAGONFLY.h>
+#include <DRAGONFLY2.h>
+
 // include the LCD library:
+
+
+
 #include <LiquidCrystal.h>
 #include <Wire.h>
 
@@ -17,8 +25,18 @@ const char *monthName[12] = {
 
 tmElements_t tm;
 const int chipSelect = 53; // SD CLK
-//File myFile;
 
+#define EXHAUST_PIN 24
+#define FAN_PIN 25
+#define COMPRESSOR_PIN 26
+#define HEATER_PIN 27
+#define WATERPUMP_PIN 28
+#define SENSOR_PIN 22
+
+
+
+DRAGONFLY aha( EXHAUST_PIN, FAN_PIN, COMPRESSOR_PIN, HEATER_PIN, WATERPUMP_PIN,  SENSOR_PIN);
+//DRAGONFLY aha( EXHAUST_PIN, FAN_PIN, COMPRESSOR_PIN, HEATER_PIN, WATERPUMP_PIN,  4);
 
 // set up variables using the SD utility library functions:
 Sd2Card card;
@@ -37,18 +55,23 @@ void setup() {
   while (!Serial) ; // wait for serial
   delay(200);
 
+  aha.initSensor(); // DHT
+  aha.TEMP(26, 2, 1001);
+  aha.HUMIDITY(26, 2, 1002);
+
+  delay(1000);
 
   pinMode(53, OUTPUT);     // change this to 53 on a mega SD
 
-  
+
 
   char fname[20] = "initData.txt";
 
   deleteStamp(fname);
   writeStamp(fname, "03/4/2015/18:15:25");
   readStamp(fname);
-  
-  
+
+
   testSD();
 
 
@@ -58,41 +81,51 @@ void setup() {
 
   //*
 
-  setNow();
+  //setNow();
 
+  /*
+    lcd.begin(16, 2);
+    int i;
+    for (i = 0; i < 100000000; i++) {
+      RTC.read(tm);
 
+      lcd.setCursor(0, 0);
+      //lcd.print("D/M/Y:");
+      lcd.print(tm.Day);
+      lcd.print("/");
+      lcd.print(tm.Month);
+      lcd.print("/");
+      lcd.print(tmYearToCalendar(tm.Year));
+
+      lcd.setCursor(0, 1);
+      //lcd.print("Time:");
+      lcd.print(tm.Hour);
+      lcd.print(":");
+      lcd.print(tm.Minute);
+      lcd.print(":");
+      lcd.print(tm.Second);
+
+    }
+
+    */
   lcd.begin(16, 2);
-  int i;
-  for (i = 0; i < 100000000; i++) {
-    RTC.read(tm);
-
-    lcd.setCursor(0, 0);
-    //lcd.print("D/M/Y:");
-    lcd.print(tm.Day);
-    lcd.print("/");
-    lcd.print(tm.Month);
-    lcd.print("/");
-    lcd.print(tmYearToCalendar(tm.Year));
-
-    lcd.setCursor(0, 1);
-    //lcd.print("Time:");
-    lcd.print(tm.Hour);
-    lcd.print(":");
-    lcd.print(tm.Minute);
-    lcd.print(":");
-    lcd.print(tm.Second);
-    //lcd.display();
-    //lcd.noBlink();
-
-    //delay(100);
-    //lcd.noDisplay();
-    //lcd.blink();
-    //delay(1000);
-  }
 }
 
 void loop() {
+
+  //aha.TEMP(26, 2, 1001);
+  //aha.HUMIDITY(26, 2, 1002);
+
+
+
+
+  formatTimetToLCDDisplay( tm, 0);
+
+
 }
+
+
+
 
 
 bool readTimeNow() {
@@ -140,6 +173,8 @@ bool setNow() {
   bool parse = false;
   bool config = false;
 
+
+
   // get the date and time the compiler was run
   if (getDate(__DATE__) && getTime(__TIME__)) {
     parse = true;
@@ -168,6 +203,15 @@ bool setNow() {
 
   return true;
 }//
+
+
+///////////////////////////////////////////////////////////////////
+
+
+
+//////////////////////////////////////////////////////////////////
+
+
 
 
 bool getTime(const char *str)
@@ -365,4 +409,82 @@ void deleteStamp(char filename[20]) {
 
 }//
 
+
+
+void formatTimetToLCDDisplay(tmElements_t tm, boolean tformat) {  
+  ////////////////////////////////////////
+  
+  ////////////////////////////////////////
+  RTC.read(tm);
+  lcd.setCursor(0, 0);
+  ////////////////////////////////////////
+  
+  ////////////////////////////////////////
+  //Day
+  if (tm.Day < 10) {
+    lcd.print('0');
+  }
+  lcd.print(tm.Day);
+  lcd.print("/");
+  ////////////////////////////////////////
+  
+  ////////////////////////////////////////  
+  //Month
+  if (tm.Month < 10) {
+    lcd.print('0');
+  }
+  lcd.print(tm.Month);
+  lcd.print("/");  
+  ////////////////////////////////////////
+  
+  ////////////////////////////////////////  
+  //Year
+  lcd.print(tmYearToCalendar(tm.Year));
+  ////////////////////////////////////////
+  ///////////// Hour /////////////////////
+  ////////////////////////////////////////
+  lcd.setCursor(0, 1);
+  if (tformat) { //true 24 Hour
+    if (tm.Hour < 10) lcd.print("0");
+    lcd.print(tm.Hour);
+    lcd.print("/");
+  }
+  else { // false 12-Hour Format
+    if (tm.Hour > 12) {
+      if (tm.Hour - 12 < 10) lcd.print("0");
+      lcd.print(tm.Hour - 12);
+    }
+    else {
+      lcd.print(tm.Hour);
+    }
+    lcd.print(":");
+  }
+  ////////////////////////////////////////
+
+  ////////////////////////////////////////
+  //Minute
+  if (tm.Minute < 10) {
+    lcd.print('0');
+  }
+  lcd.print(tm.Minute);
+  lcd.print(":");
+  ////////////////////////////////////////
+
+  ////////////////////////////////////////
+  //Second
+  if (tm.Second < 10) {
+    lcd.print('0');
+  }
+  lcd.print(tm.Second);
+  ////////////////////////////////////////
+
+  ////////////////////////////////////////
+  if (tm.Hour > 12) {
+    lcd.print("PM");
+  }
+  else {
+    lcd.print("AM ");
+  }
+  ////////////////////////////////////////
+}//formatTimetToLCDDisplay
 
