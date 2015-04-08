@@ -57,7 +57,7 @@ void setup(){
        lcd.begin(16, 2);//LCD       
        pinMode(53, OUTPUT); //SD    // change this to 53 on a mega SD
        
-       int tmHour = 16;
+       int tmHour = 18;
        int tmMinute = 13;
        int tmSecond = 12;
        int tmDay = 53;
@@ -68,7 +68,7 @@ void setup(){
        //readRTCTime();
        
        //SDtest(); //SD       
-       //createStampFile( tmHour,  tmMinute,  tmSecond,  tmDay,  tmMonth,  tmYear,  true); //STAMPING
+       createStampFile( tmHour,  tmMinute,  tmSecond,  tmDay,  tmMonth,  tmYear,  true); //STAMPING
       
        //createStampFile(true); //STAMPING
        //SDreadFile("DTstamp");

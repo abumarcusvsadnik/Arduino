@@ -1,6 +1,9 @@
 
 //this routine add adding zero to an array hour if less than ten.
-int createStampFile1(int tmHour, int tmMinute, int tmSecond, int tmDay, int tmMonth, int tmYear, boolean debug){
+int createStampFile(int tmHour, int tmMinute, int tmSecond, int tmDay, int tmMonth, int tmYear, boolean debug){
+
+
+	       
 
 
 	//////////////////////////////////////////////////////////////////
@@ -43,7 +46,10 @@ int createStampFile1(int tmHour, int tmMinute, int tmSecond, int tmDay, int tmMo
       
 
 	if(debug){
-        Serial.println("<!--------------------------------------------------------!>");
+	Serial.println("<!--------------------------------------------------------!>");
+        Serial.println("(*)createStampFile2");
+        Serial.println("Time/Date Got from RTC Clock!");
+        Serial.println("Debug Enabled");
 	Serial.print("The Hour ");
 	Serial.println(Hour);
 
@@ -69,9 +75,11 @@ int createStampFile1(int tmHour, int tmMinute, int tmSecond, int tmDay, int tmMo
 	Serial.println(stamp); 
         Serial.println("<!--------------------------------------------------------!>");
         }//if(debug)
+
         
-        
+        SDdelFile("DTstamp");
         SDcreateFile("DTstamp", stamp);
+        
 
          return 0;
 
@@ -80,7 +88,7 @@ int createStampFile1(int tmHour, int tmMinute, int tmSecond, int tmDay, int tmMo
   
   
   
-  int createStampFile2(boolean debug){
+  int createStampFile(boolean debug){
     
         
         RTC.read(tm);
@@ -129,6 +137,9 @@ int createStampFile1(int tmHour, int tmMinute, int tmSecond, int tmDay, int tmMo
 
 	if(debug){
 	Serial.println("<!--------------------------------------------------------!>");
+        Serial.println("(*)createStampFile2");
+        Serial.println("Time/Date Got from RTC Clock!");
+        Serial.println("Debug Enabled");
 	Serial.print("The Hour ");
 	Serial.println(Hour);
 
