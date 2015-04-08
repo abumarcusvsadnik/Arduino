@@ -15,7 +15,7 @@ void setup() {
 
 void loop() {
 
-  displayRTCTimeToLCD(tm, 0);
+  displayRTCTimeToLCD(tm,1);
 }
 
 void initLCD() {
@@ -29,32 +29,95 @@ void displayRTCTimeToLCD(tmElements_t tm, boolean tformat) {
 
   ////////////////////////////////////////
   RTC.read(tm);
-  
-   ////////////////////////////////////////
+
+  ////////////////////////////////////////
   ///////////// Hour /////////////////////
   ////////////////////////////////////////
+  //tm.Hour = 22;
+  
   lcd.setCursor(0, 0);
-  if (tformat) { //true 24 Hour
-    if (tm.Hour < 10) lcd.print("0");
+   if (tformat)
+  { // 24 Hours
+
+    if (tm.Hour < 10)  {
+      //lcd.print("0");
+     lcd.print("0");          
+     lcd.print(tm.Hour);
+  }
+              
+              
+    else 
+    
     lcd.print(tm.Hour);
-    lcd.print(":");
-  }
-  else { // false 12-Hour Format
-    if (tm.Hour > 12) {
-      if (tm.Hour - 12 < 10) lcd.print("0");
-      lcd.print(tm.Hour - 12);
+    
+    
+    
+    
+  } else {
+
+    if (tm.Hour < 10)  {
+
+      
+     lcd.print("0");
+     lcd.print(tm.Hour);
+      
+      
+   
     }
-    else {
-      lcd.print(tm.Hour);
+    if (tm.Hour >= 10 && tm.Hour <= 12)  {
+
+       lcd.print(tm.Hour);
+      
+     
     }
+
+    if (tm.Hour > 12 && (tm.Hour - 12) < 10)  {
+      
+   
+      
+     lcd.print("0");
+     lcd.print((tm.Hour - 12));
+
+
+      
+    }
+
+    if (tm.Hour > 12 && (tm.Hour - 12) >= 10)  {
+
+      if ((tm.Hour - 12) < 12)
+      {
+        
+       lcd.print((tm.Hour - 12));
+        
+        
+      }
+      else
+      {
+        
+        
+       lcd.print("00");
+        
+      
+      }
+    }
+
+
+ 
+  
+  }//if(tformat)
+  
     lcd.print(":");
-  }
+     
+     
+
   ////////////////////////////////////////
 
   ////////////////////////////////////////
+  
+  
   //Minute
   if (tm.Minute < 10) {
-    lcd.print('0');
+    lcd.print('0');    
   }
   lcd.print(tm.Minute);
   lcd.print(":");
@@ -78,13 +141,8 @@ void displayRTCTimeToLCD(tmElements_t tm, boolean tformat) {
       lcd.print("AM ");
     }
   }
-  
-  
-  
-  
-  
-  
-  
+
+
   lcd.setCursor(0, 1);
   ////////////////////////////////////////
 
@@ -109,8 +167,11 @@ void displayRTCTimeToLCD(tmElements_t tm, boolean tformat) {
   ////////////////////////////////////////
   //Year
   lcd.print(tmYearToCalendar(tm.Year));
- 
+
   ////////////////////////////////////////
+  
+ 
+  
 }//displayRTCTimeToLCD
 
 

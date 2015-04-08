@@ -1,5 +1,3 @@
-#include <dht.h>
-
 #include <DRAGONFLY.h>
 #include <DRAGONFLY2.h>
 
@@ -10,9 +8,6 @@
 #include <LiquidCrystal.h>
 #include <Wire.h>
 
-// include the RTC library:
-#include <Time.h>
-#include <DS1307RTC.h>
 
 // include the SD library:
 #include <SPI.h>
@@ -67,8 +62,8 @@ void setup() {
 
   char fname[20] = "initData.txt";
 
-  deleteStamp(fname);
-  writeStamp(fname, "03/4/2015/18:15:25");
+  //deleteStamp(fname);
+  //writeStamp(fname, "03/4/2015/18:15:25");
   readStamp(fname);
 
 
@@ -316,6 +311,38 @@ void testSD() {
 
 
 
+void readStamp(char filename[]) {
+  SD.begin(chipSelect);
+
+
+  // re-open the file for reading:
+  File myFile = SD.open(filename);
+  if (myFile) {
+
+    Serial.println("\n(*)readStamp()");
+
+    Serial.print("Filename\t");
+    Serial.print(filename);
+    Serial.print("\t");
+    // read from the file until there's nothing else in it:
+    while (myFile.available()) {
+      Serial.write(myFile.read());
+    }
+
+    Serial.print("\n");
+    // close the file:
+    myFile.close();
+
+  } else {
+    // if the file didn't open, print an error:
+    Serial.print("error opening\t");
+    Serial.println(filename);
+    Serial.println();
+  }
+
+}
+
+
 void writeStamp(char filename[20], char str[20]) {
   SD.begin(chipSelect);
   // open the file. note that only one file can be open at a time,
@@ -349,36 +376,6 @@ void writeStamp(char filename[20], char str[20]) {
 }
 
 
-void readStamp(char filename[20]) {
-  SD.begin(chipSelect);
-
-
-  // re-open the file for reading:
-  File myFile = SD.open(filename);
-  if (myFile) {
-
-    Serial.println("\n(*)readStamp()");
-
-    Serial.print("Filename\t");
-    Serial.print(filename);
-    Serial.print("\t");
-    // read from the file until there's nothing else in it:
-    while (myFile.available()) {
-      Serial.write(myFile.read());
-    }
-
-    Serial.print("\n");
-    // close the file:
-    myFile.close();
-
-  } else {
-    // if the file didn't open, print an error:
-    Serial.print("error opening\t");
-    Serial.println(filename);
-    Serial.println();
-  }
-
-}
 
 
 
