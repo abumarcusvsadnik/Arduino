@@ -1,6 +1,5 @@
 
 
-
 /*
 
 #include <SPI.h>
@@ -58,6 +57,7 @@ pinMode(53, OUTPUT);     // change this to 53 on a mega SD
   }
 
 
+
   // print the type and size of the first FAT-type volume
   uint32_t volumesize;
   Serial.print("\nVolume type is FAT");
@@ -90,7 +90,7 @@ pinMode(53, OUTPUT);     // change this to 53 on a mega SD
 }//END
 
 
-void SDreadDirectory(char filename[]) {
+void SDreadFile(char filename[]) {
   SD.begin(chipSelect);
 
 
@@ -124,7 +124,7 @@ Serial.println("<!--------------------------------------------------------!>");
 }
 
 
-void SDCreateFile(char filename[], char str[17]) {
+void SDcreateFile(char filename[], char str[17]) {
   SD.begin(chipSelect);
   // open the file. note that only one file can be open at a time,
   // so you have to close this one before opening another.

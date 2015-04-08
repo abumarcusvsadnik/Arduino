@@ -1,16 +1,16 @@
-#include <SPI.h>
-#include <SD.h>
+//SD Card    
+    #include <SPI.h>
+    #include <SD.h>
 
-#include <LiquidCrystal.h>//LCD
+    #include <LiquidCrystal.h>//LCD
 
-// include the RTC library:
-#include <Time.h>
-#include <DS1307RTC.h>
-#include <Wire.h>
+//  include the RTC library:
+    #include <Time.h>
+    #include <DS1307RTC.h>
+    #include <Wire.h>
 
 tmElements_t tm;
 
-int createStampFile1(int tmHour, int tmMinute, int tmSecond, int tmDay, int tmMonth, int tmYear, boolean debug);
 
 LiquidCrystal lcd(7, 6, 5, 8, 3, 2);//LCD
 
@@ -21,7 +21,14 @@ SdVolume volume;
 SdFile root;
 
 
-
+    void SDtest();
+    void SDreadFile(char filename[]);
+    void SDcreateFile(char filename[], char str[17]);    
+    void SDdelFile(char filename[]);
+    
+    
+    
+    
 
 void setup(){
 
@@ -38,13 +45,13 @@ void setup(){
        int tmYear = 2015;
  
        
-       readTimeNow();
+       readRTCTime();
        
        SDtest(); //SD       
        //createStampFile( tmHour,  tmMinute,  tmSecond,  tmDay,  tmMonth,  tmYear,  true); //STAMPING
-       
-       createStampFile2(true); //STAMPING
-       SDreadDirectory("DTstamp");
+      
+       //createStampFile2(true); //STAMPING
+       SDreadFile("DTstamp");
        //SDdelFile("DTstamp");
        
        SDtest(); //SD

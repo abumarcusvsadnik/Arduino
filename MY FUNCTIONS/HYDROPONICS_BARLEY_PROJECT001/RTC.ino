@@ -8,7 +8,7 @@ const char *monthName[12] = {
 
 
 
-bool readTimeNow() {
+bool readRTCTime() {
   Serial.println("<!--------------------------------------------------------!>");
   if (RTC.read(tm)) {
     Serial.print("Ok, Time = ");
@@ -51,7 +51,7 @@ void print2digits(int number) {
   Serial.print(number);
 
 } //
-bool setNow() {
+bool copySetPCTimetoRTCTime() {
 
   bool parse = false;
   bool config = false;

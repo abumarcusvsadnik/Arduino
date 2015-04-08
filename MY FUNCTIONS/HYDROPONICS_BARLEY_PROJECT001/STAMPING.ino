@@ -71,7 +71,7 @@ int createStampFile1(int tmHour, int tmMinute, int tmSecond, int tmDay, int tmMo
         }//if(debug)
         
         
-        SDCreateFile("DTstamp", stamp);
+        SDcreateFile("DTstamp", stamp);
 
          return 0;
 
@@ -157,7 +157,7 @@ int createStampFile1(int tmHour, int tmMinute, int tmSecond, int tmDay, int tmMo
 
         
         SDdelFile("DTstamp");
-        SDCreateFile("DTstamp", stamp);
+        SDcreateFile("DTstamp", stamp);
         
 
          return 0;
