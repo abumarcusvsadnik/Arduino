@@ -253,13 +253,4 @@ int  displayRTCTimeToLCD(tmElements_t tm, boolean tformat) {
 
 
 
-boolean displayStringToLCD(char str[], unsigned int col, unsigned int row, bool debug) {
-    
-    lcd.setCursor(col,row);
-    lcd.print(str);    
-    
-    return true;
-  
-  
-}
 

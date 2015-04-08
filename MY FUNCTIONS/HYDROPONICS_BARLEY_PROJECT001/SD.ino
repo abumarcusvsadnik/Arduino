@@ -90,7 +90,7 @@ pinMode(53, OUTPUT);     // change this to 53 on a mega SD
 }//END
 
 
-void SDreadFile(char filename[]) {
+void SDreadFile(char* filename) {
   SD.begin(chipSelect);
 
 
@@ -99,11 +99,11 @@ void SDreadFile(char filename[]) {
   if (myFile) {
     
     Serial.println("<!--------------------------------------------------------!>");
-    Serial.println("(*)SDreadDirectory()");
+    Serial.println("(*)SDreadFile(char* filename)");
 
-    Serial.print("Filename: ");
+    Serial.print("\tFilename\t: ");
     Serial.println(filename);
-    Serial.print("Content: ");
+    Serial.print("\tContent\t: ");
     // read from the file until there's nothing else in it:
     while (myFile.available()) {
       Serial.write(myFile.read());
@@ -133,7 +133,7 @@ void SDcreateFile(char filename[], char str[17]) {
   // if the file opened okay, write to it:
   if (myFile) {
     Serial.println("<!--------------------------------------------------------!>");
-    Serial.println("\n(*)SDCreateFile()");
+    Serial.println("\n(*)SDcreateFile(char filename[], char str[17])");
     //  Serial.println("");
     Serial.print("Writing to\t");
     Serial.print(filename);
@@ -188,9 +188,6 @@ void SDdelFile(char filename[]) {
     Serial.println("<!--------------------------------------------------------!>");
 
 }//
-
-
-
 
 
 
