@@ -26,6 +26,7 @@ SdFile root;
     void SDcreateFile(char filename[], char str[17]);    
     void SDdelFile(char filename[]);
     
+    
     //RTC-LCD Functions
     int  displayRTCTimeToLCD(int tmHour, int tmMinute, int tmSecond, int tmDay, int tmMonth, int tmYear, boolean tformat);
     int  displayRTCTimeToLCD(tmElements_t tm, boolean tformat);
@@ -36,6 +37,16 @@ SdFile root;
     bool copySetPCTimetoRTCTime();
     void print2digits(int number);
     bool readRTCTime();
+    
+    //Stamping Functions
+    int asciitodec(int ascii);
+    int readStampReturntmHour(char* filename);
+    int createStampFile(boolean debug);
+    int createStampFile(int tmHour, int tmMinute, int tmSecond, int tmDay, int tmMonth, int tmYear, boolean debug);
+    //int timelapse();
+    
+    
+    
 
 
 void setup(){
@@ -46,7 +57,7 @@ void setup(){
        lcd.begin(16, 2);//LCD       
        pinMode(53, OUTPUT); //SD    // change this to 53 on a mega SD
        
-       int tmHour = 12;
+       int tmHour = 16;
        int tmMinute = 13;
        int tmSecond = 12;
        int tmDay = 53;
@@ -57,9 +68,9 @@ void setup(){
        //readRTCTime();
        
        //SDtest(); //SD       
-       //createStampFile1( tmHour,  tmMinute,  tmSecond,  tmDay,  tmMonth,  tmYear,  true); //STAMPING
+       //createStampFile( tmHour,  tmMinute,  tmSecond,  tmDay,  tmMonth,  tmYear,  true); //STAMPING
       
-       //createStampFile2(true); //STAMPING
+       //createStampFile(true); //STAMPING
        //SDreadFile("DTstamp");
        int h = readStampReturntmHour("DTstamp");
        //SDdelFile("DTstamp");
@@ -78,8 +89,7 @@ void loop(){
 
 
   displayRTCTimeToLCD(tm,0);
-    lcd.scrollDisplayRight();
-delay(150);
+  
 
 
 
