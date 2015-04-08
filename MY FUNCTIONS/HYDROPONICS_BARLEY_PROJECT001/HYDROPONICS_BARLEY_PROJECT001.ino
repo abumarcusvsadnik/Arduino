@@ -26,14 +26,21 @@ SdFile root;
     void SDcreateFile(char filename[], char str[17]);    
     void SDdelFile(char filename[]);
     
+    int  displayRTCTimeToLCD(int tmHour, int tmMinute, int tmSecond, int tmDay, int tmMonth, int tmYear, boolean tformat);
+    int  displayRTCTimeToLCD(tmElements_t tm, boolean tformat);
+    boolean displayStringToLCD(char str[], unsigned int col, unsigned int row, bool debug);
     
-    
-    
+    bool getDate(const char *str);
+    bool getTime(const char *str);
+    bool copySetPCTimetoRTCTime();
+    void print2digits(int number);
+    bool readRTCTime();
 
 void setup(){
 
        Serial.begin(9600);
        while(!Serial);
+       delay(3000);
        lcd.begin(16, 2);//LCD       
        pinMode(53, OUTPUT); //SD    // change this to 53 on a mega SD
        
@@ -63,9 +70,13 @@ void setup(){
 
 
 void loop(){
+  displayStringToLCD("this is shit",0,0,0);
+  delay(2000);
+  //displayStringToLCD("noooooo!!!!",0,1,0);
+  //delay(2000);
   
-  displayRTCTimeToLCD(tm,0);
-//displayRTCTimeToLCD(2,2,2,2,2,2019,0);
+  //displayRTCTimeToLCD(tm,0);
+  //displayRTCTimeToLCD(2,2,2,2,2,2019,0);
 
 }
 

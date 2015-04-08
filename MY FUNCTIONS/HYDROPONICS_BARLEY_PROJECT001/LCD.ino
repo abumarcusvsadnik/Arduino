@@ -47,50 +47,25 @@ int  displayRTCTimeToLCD(int tmHour, int tmMinute, int tmSecond, int tmDay, int 
      
     }
 
-    if (tmHour > 12 && (tmHour - 12) < 10)  {
-      
-   
-      
+    if (tmHour > 12 && (tmHour - 12) < 10)  {      
      lcd.print("0");
-     lcd.print((tmHour - 12));
-
-
-      
+     lcd.print((tmHour - 12));    
     }
-
     if (tmHour > 12 && (tmHour - 12) >= 10)  {
-
       if ((tmHour - 12) < 12)
-      {
-        
-       lcd.print((tmHour - 12));
-        
-        
+      {        
+       lcd.print((tmHour - 12));        
       }
       else
-      {
-        
-        
+      {  
        lcd.print("00");
-        
-      
       }
     }
-
-
- 
-  
   }//if(tformat)
-  
     lcd.print(":");
-     
-     
-
   ////////////////////////////////////////
 
-  ////////////////////////////////////////
-  
-  
+  ////////////////////////////////////////  
   //Minute
   if (tmMinute < 10) {
     lcd.print('0');    
@@ -117,8 +92,6 @@ int  displayRTCTimeToLCD(int tmHour, int tmMinute, int tmSecond, int tmDay, int 
       lcd.print("AM ");
     }
   }
-
-
   lcd.setCursor(0, 1);
   ////////////////////////////////////////
 
@@ -170,43 +143,20 @@ int  displayRTCTimeToLCD(tmElements_t tm, boolean tformat) {
       //lcd.print("0");
      lcd.print("0");          
      lcd.print(tm.Hour);
-  }
-              
-              
+  }           
     else 
-    
     lcd.print(tm.Hour);
-    
-    
-    
-    
   } else {
-
     if (tm.Hour < 10)  {
-
-      
      lcd.print("0");
      lcd.print(tm.Hour);
-      
-      
-   
     }
     if (tm.Hour >= 10 && tm.Hour <= 12)  {
-
-       lcd.print(tm.Hour);
-      
-     
+       lcd.print(tm.Hour);    
     }
-
     if (tm.Hour > 12 && (tm.Hour - 12) < 10)  {
-      
-   
-      
      lcd.print("0");
      lcd.print((tm.Hour - 12));
-
-
-      
     }
 
     if (tm.Hour > 12 && (tm.Hour - 12) >= 10)  {
@@ -300,3 +250,16 @@ int  displayRTCTimeToLCD(tmElements_t tm, boolean tformat) {
  
   return 0;
 }//displayRTCTimeToLCD
+
+
+
+boolean displayStringToLCD(char str[], unsigned int col, unsigned int row, bool debug) {
+    
+    lcd.setCursor(col,row);
+    lcd.print(str);    
+    
+    return true;
+  
+  
+}
+
