@@ -1,11 +1,6 @@
 
 //this routine add adding zero to an array hour if less than ten.
-int createStampFile(int tmHour, int tmMinute, int tmSecond, int tmDay, int tmMonth, int tmYear, boolean debug){
-
-
-	       
-
-
+int createStampFile(int tmHour, int tmMinute, int tmSecond, int tmDay, int tmMonth, int tmYear, boolean debug){      
 	//////////////////////////////////////////////////////////////////
 
         char Hour[3];
