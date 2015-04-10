@@ -27,8 +27,8 @@ if (! rtc.isrunning()) {
   }
 ///////////////////////////////////////////////////////////////////////
 //inside setup or loop
-DateTime now = rtc.now(); 
-    
+DateTime now = rtc.now();
+
     Serial.print(now.year(), DEC);
     Serial.print('/');
     Serial.print(now.month(), DEC);
@@ -39,36 +39,62 @@ DateTime now = rtc.now();
 
 
 bool rtcInit()
-{ 
-  #ifdef AVR
-    Wire.begin();
-  #else
-    Wire1.begin(); // Shield I2C pins connect to alt I2C bus on Arduino Due
-  #endif
-    rtc.begin();       
-  return true;  
+{
+#ifdef AVR
+  Wire.begin();
+#else
+  Wire1.begin(); // Shield I2C pins connect to alt I2C bus on Arduino Due
+#endif
+  rtc.begin();
+  return true;
 }
-bool rtcSetNow(int Year,int Month,int Day,int Hour,int Minute,int Second)
-{       
- if (rtc.isrunning()) 
-    {
+bool rtcSetNow(int Year, int Month, int Day, int Hour, int Minute, int Second ,int debugid)
+{
+  if (rtc.isrunning())
+  {
     //Serial.println("RTC is running!");
     rtc.adjust(DateTime(Year, Month, Day, Hour, Minute, Second));
-    }  
-    return true;
+  }
+  
+    //////////////////////////////////////// 
+  if (debugid != 0) {
+
+   Serial.print("debugid"); 
+   Serial.println(debugid); 
+   Serial.print("rtcSetNow(,,,)");  
+   Serial.println("input values");     
+   Serial.println("output values");            
+  }
+  //////////////////////////////////////// 
+  
+  
+  return true;
 }
 
-bool rtcSetNow()
-{       
- if (rtc.isrunning()) 
-    {
+bool rtcSetNow(int debugid)
+{
+  if (rtc.isrunning())
+  {
     //Serial.println("RTC is NOT running!");
     // following line sets the RTC to the date & time this sketch was compiled
     rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
     // This line sets the RTC with an explicit date & time, for example to set
-    // January 21, 2014 at 3am you would call:    
-    }  
-    return true;
+    // January 21, 2014 at 3am you would call:
+  }
+
+  ////////////////////////////////////////
+  if (debugid != 0) {
+
+   Serial.print("debugid"); 
+   Serial.println(debugid); 
+   Serial.print("rtcSetNow(,)");  
+    Serial.println("input values");
+    Serial.println("output values");
+  }
+  ////////////////////////////////////////
+
+
+  return true;
 }
 
 

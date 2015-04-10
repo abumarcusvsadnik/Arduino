@@ -4,7 +4,7 @@ void addZero(int x) {
 }
 ///////////////////////////////////////////////////////////////////
 //this routine add adding zero to an array hour if less than ten.
-int createStampFile(char* filename, int tmHour, int tmMinute, int tmSecond, int tmDay, int tmMonth, int tmYear, boolean debug) {
+int createStampFile(char* filename, int tmHour, int tmMinute, int tmSecond, int tmDay, int tmMonth, int tmYear, int debugid) {
   //////////////////////////////////////////////////////////////////
   char Hour[3];
   char Minute[3];
@@ -27,9 +27,13 @@ int createStampFile(char* filename, int tmHour, int tmMinute, int tmSecond, int 
   if (tmYear < 10) sprintf(Year, "%c%d", '0', tmYear);
   else sprintf(Year, "%d", tmYear);
 
-  if (debug) {
+  if (debugid != 0) {
+    Serial.print("debugid"); 
+   Serial.println(debugid); 
+   Serial.print("createStampFile(,,,)");  
+
     Serial.println("<!--------------------------------------------------------!>");
-    Serial.println("(*)createStampFile2");
+    
     Serial.println("Time/Date Got from RTC Clock!");
     Serial.println("Debug Enabled");
     Serial.print("The Hour ");
@@ -50,12 +54,12 @@ int createStampFile(char* filename, int tmHour, int tmMinute, int tmSecond, int 
     Serial.println(stamp);
     Serial.println("<!--------------------------------------------------------!>");
   }//if(debug)
-  SDdelFile("DTstamp");
-  SDcreateFile("DTstamp", stamp);
+  SDdelFile(filename,debugid);
+  SDcreateFile(filename, stamp,debugid);
   return 0;
 }
 
-int createStampFile(char* filename, boolean debug) {
+int createStampFile(char* filename, int debugid) {
   DateTime now = rtc.now();
   //////////////////////////////////////////////////////////////////
   char Hour[3];
@@ -78,9 +82,10 @@ int createStampFile(char* filename, boolean debug) {
   else sprintf(Month, "%d", now.month());
   if (now.year() < 10) sprintf(Year, "%c%d", '0', now.year());
   else sprintf(Year, "%d", now.year());
-  if (debug) {
-    Serial.println("<!--------------------------------------------------------!>");
-    Serial.println("(*)createStampFile2");
+  if (debugid != 0) {
+    Serial.print("debugid"); 
+   Serial.println(debugid); 
+   Serial.print("createStampFile(,,)");  
     Serial.println("Time/Date Got from RTC Clock!");
     Serial.println("Debug Enabled");
     Serial.print("The Hour ");
@@ -101,13 +106,12 @@ int createStampFile(char* filename, boolean debug) {
     Serial.println(stamp);
     Serial.println("<!--------------------------------------------------------!>");
   }//if(debug)
-  SDdelFile(filename);
-  SDcreateFile(filename, stamp);
-  SDreadFileContent(filename);
+  SDdelFile(filename,debugid);
+  SDcreateFile(filename, stamp,debugid); 
   return 0;
 }//createstampfile
 //!--------------------------------------------------------------------------------------------!//
-long unsigned readStampReturnTime(char* filename, bool debug) {
+long unsigned readStampReturnTime(char* filename, int debugid) {
   SD.begin(chipSelect);
   byte i;
   // re-open the file for reading:
@@ -131,8 +135,9 @@ long unsigned readStampReturnTime(char* filename, bool debug) {
     Serial.print("\nerror opening\t");
     Serial.println(filename);
     Serial.println();
+    //debugid = 0;
   }
-  if (debug) {
+  if (debugid != 0) {
     Serial.println("\n\nHour Value is: ");
     for (i = 0; i  <= 13 ; i++) {
       Serial.print("Stamp[");
@@ -148,14 +153,23 @@ long unsigned readStampReturnTime(char* filename, bool debug) {
   //unsinged long 2,147,483,647
   //word/unsigned int 65,535
   //byte 0-255
-  unsigned long          t0 = asciitodec(stamp[0]) * 100000;
-  unsigned int           t1 = asciitodec(stamp[1]) * 10000;
-  unsigned int           t2 = asciitodec(stamp[2]) * 1000;
-  unsigned int           t3 = asciitodec(stamp[3]) * 100;
-  byte                   t4 = asciitodec(stamp[4]) * 10;
-  byte                   t5 = asciitodec(stamp[5]);
-  long unsigned tmp = t0 + t1 + t2 + t3 + t4 + t5;
-  if (debug) {
+  //  long tmp;
+  unsigned long t0, t1, t2, t3, t4, t5, tmp; //dont change the datatypes (unsigned long) error happens
+
+  t0 = asciitodec(stamp[0],debugid);
+  t1 = asciitodec(stamp[1],debugid);
+  t2 = asciitodec(stamp[2],debugid);
+  t3 = asciitodec(stamp[3],debugid);
+  t4 = asciitodec(stamp[4],debugid);
+  t5 = asciitodec(stamp[5],debugid);
+
+  tmp  = t0 * 100000 + t1 * 10000 + t2 * 1000 + t3 * 100 + t4 * 10 + t5;
+
+  if (debugid != 0) {
+    Serial.print("debugid"); 
+   Serial.println(debugid); 
+   Serial.print("readStampReturnTime(,,)");  
+
     Serial.print("h0 ");
     Serial.println(t0);
     Serial.print("h1 ");
@@ -170,14 +184,15 @@ long unsigned readStampReturnTime(char* filename, bool debug) {
     Serial.println(t5);
     Serial.print("returned value ");
     Serial.println(tmp);
-    SDreadFileContent(filename);
   }
+
+
   return tmp;
 }//end function
 //!--------------------------------------------------------------------------------------------!//
 
 //!--------------------------------------------------------------------------------------------!//
-long unsigned  readStampReturnDate(char* filename, bool debug) {
+long unsigned  readStampReturnDate(char* filename, int debugid) {
   SD.begin(chipSelect);
   byte i;
 
@@ -204,7 +219,7 @@ long unsigned  readStampReturnDate(char* filename, bool debug) {
     Serial.println(filename);
     Serial.println();
   }
-  if (debug) {
+  if (debugid != 0) {
     Serial.println("\n\nHour Value is: ");
     for (i = 0; i  <= 13 ; i++) {
 
@@ -221,16 +236,20 @@ long unsigned  readStampReturnDate(char* filename, bool debug) {
   //unsinged long 2,147,483,647
   //word/unsigned int 65,535
   //byte 0-255
-  long unsigned       t6 = asciitodec(stamp[6])  * 10000000;
-  long unsigned       t7 = asciitodec(stamp[7])  * 1000000;
-  unsigned long          t8 = asciitodec(stamp[8])  * 100000;
-  unsigned int           t9 = asciitodec(stamp[9])  * 10000;
-  unsigned int           t10 = asciitodec(stamp[10]) * 1000;
-  unsigned int           t11 = asciitodec(stamp[11]) * 100;
-  byte                   t12 = asciitodec(stamp[12]) * 10;
-  byte                   t13 = asciitodec(stamp[13]);
-  unsigned long tmp = t6 + t7 + t8 + t9 + t10 + t11 + t12 + t13;
-  if (debug) {
+  unsigned long t6, t7, t8, t9, t10, t11, t12, t13, tmp; //dont change the datatypes (unsigned long) error happens
+
+  t6  = asciitodec(stamp[6],debugid);
+  t7  = asciitodec(stamp[7],debugid);
+  t8  = asciitodec(stamp[8],debugid);
+  t9  = asciitodec(stamp[9],debugid);
+  t10 = asciitodec(stamp[10],debugid);
+  t11 = asciitodec(stamp[11],debugid);
+  t12 = asciitodec(stamp[12],debugid);
+  t13 = asciitodec(stamp[13],debugid);
+
+  tmp  = t6 * 10000000 + t7 * 1000000 + t8 * 100000 + t9 * 10000 + t10 * 1000 + t11 * 100 + t12 * 10 + t13;
+
+  if (debugid != 0) {
     Serial.print("t6 ");
     Serial.println(t6);
     Serial.print("t7 ");
@@ -249,17 +268,172 @@ long unsigned  readStampReturnDate(char* filename, bool debug) {
     Serial.println(t13);
     Serial.print("returned value ");
     Serial.println(tmp);
-    SDreadFileContent(filename);
+
   }
+
+  ////////////////////////////////////////
+   if (debugid != 0) {
+    Serial.print("debugid"); 
+   Serial.println(debugid); 
+   Serial.print("readStampReturnDate(,,)");  
+
+    Serial.println("input values");
+    Serial.println("output values");
+  }
+  ////////////////////////////////////////
+
+
+
   return tmp;
 }//end function
+
 //////////////////////////////////////////////
-unsigned long  converttosec(int Day, int Hour, int Minute, int Second, bool debug)
+unsigned int processTimetoDay(char* filename, int debugid) {
+  long unsigned date;
+  unsigned int d, m, y;
+  date = readStampReturnDate(filename, debugid);
+  d = date / 1000000;
+  date = date % 1000000;
+  m = date / 10000;
+  date = date % 10000;
+  y = date;
+
+  ////////////////////////////////////////
+   if (debugid != 0) {
+    Serial.print("debugid"); 
+   Serial.println(debugid); 
+   Serial.print("processTimetoDay(,,)");  
+    Serial.println("input values");
+    Serial.println("output values");
+  }
+  ////////////////////////////////////////
+
+  return d;
+}//
+//////////////////////////////////////////////
+unsigned int processTimetoMonth(char* filename, int debugid) {
+  long unsigned date;
+  unsigned int d, m, y;
+  date = readStampReturnDate(filename,  debugid);
+  d = date / 1000000;
+  date = date % 1000000;
+  m = date / 10000;
+  date = date % 10000;
+  y = date;
+
+  ////////////////////////////////////////
+  if (debugid != 0) {
+    Serial.println("debugid");
+    Serial.println("function name");
+    Serial.println("input values");
+    Serial.println("output values");
+  }
+  ////////////////////////////////////////
+
+  return m;
+}//
+//////////////////////////////////////////////
+unsigned int processTimetoYear(char* filename, int debugid) {
+  long unsigned date;
+  unsigned int d, m, y;
+  date = readStampReturnDate(filename,  debugid);
+  d = date / 1000000;
+  date = date % 1000000;
+  m = date / 10000;
+  date = date % 10000;
+  y = date;
+
+  ////////////////////////////////////////
+  if (debugid != 0) {
+    Serial.println("debugid");
+    Serial.println("function name");
+    Serial.println("input values");
+    Serial.println("output values");
+  }
+  ////////////////////////////////////////
+
+  return y;
+}//
+//////////////////////////////////////////////
+unsigned int processTimetoHour(char* filename, int debugid) {
+  long  time;
+  unsigned long  h, m, s;
+  time = readStampReturnTime(filename,  debugid);
+  h = time / 10000;
+  time = time % 10000;
+  m = time / 100;
+  time = time % 100;
+  s = time ;
+
+  ////////////////////////////////////////
+  if (debugid != 0) {
+    Serial.println("debugid");
+    Serial.println("function name");
+    Serial.println("input values");
+    Serial.println("output values");
+  }
+  ////////////////////////////////////////
+
+
+
+  return h;
+}//
+//////////////////////////////////////////////
+unsigned int processTimetoMin(char* filename, int debugid) {
+  long unsigned time;
+  unsigned int h, m, s;
+  time = readStampReturnTime(filename,  debugid);
+  h = time / 10000;
+  time = time % 10000;
+  m = time / 100;
+  time = time % 100;
+  s = time ;
+
+
+  ////////////////////////////////////////
+  if (debugid != 0) {
+    Serial.println("debugid");
+    Serial.println("function name");
+    Serial.println("input values");
+    Serial.println("output values");
+  }
+  ////////////////////////////////////////
+
+
+  return m;
+}//
+//////////////////////////////////////////////
+unsigned int processTimetoSec(char* filename, int debugid) {
+  long unsigned time;
+  unsigned int h, m, s;
+  time = readStampReturnTime(filename,  debugid);
+  h = time / 10000;
+  time = time % 10000;
+  m = time / 100;
+  time = time % 100;
+  s = time ;
+
+  ////////////////////////////////////////
+  if (debugid != 0) {
+    Serial.println("debugid");
+    Serial.println("function name");
+    Serial.println("input values");
+    Serial.println("output values");
+  }
+  ////////////////////////////////////////
+
+
+
+  return s;
+}//
+//////////////////////////////////////////////
+//////////////////////////////////////////////
+unsigned long  converttosec(int Day, int Hour, int Minute, int Second, int debugid)
 {
 
   unsigned long  x = ((Day * 86400) + (Hour * 3600) + (Minute * 60) + (Second));
 
-  if (debug) {
+  if (debugid != 0) {
     Serial.println("<!--------------------------------------------------------------------------!>");
     Serial.println("Function Name: converttosec() ");
     Serial.println("**********************");
@@ -278,10 +452,21 @@ unsigned long  converttosec(int Day, int Hour, int Minute, int Second, bool debu
     Serial.println(x);
     Serial.println("<!--------------------------------------------------------------------------!>");
   }
+
+  ////////////////////////////////////////
+  if (debugid != 0) {
+    Serial.println("debugid");
+    Serial.println("function name");
+    Serial.println("input values");
+    Serial.println("output values");
+  }
+  ////////////////////////////////////////
+
+
   return x;
 }
 //////////////////////////////////////////////
-int asciitodec(int ascii) {
+int asciitodec(int ascii, int debugid) {
   int h0;
   switch (ascii) {
     case 48 : h0 = 0; break;
@@ -295,79 +480,17 @@ int asciitodec(int ascii) {
     case 56 : h0 = 8;  break;
     case 57 : h0 = 9;  break;
   }
+
+  ////////////////////////////////////////
+  if (debugid != 0) {
+    Serial.println("debugid");
+    Serial.println("function name");
+    Serial.println("input values");
+    Serial.println("output values");
+  }
+  ////////////////////////////////////////
+
+
+
   return h0;
 }//end function
-//////////////////////////////////////////////
-unsigned int processTimetoDay(char* filename) {
-  long unsigned date;
-  unsigned int d, m, y;
-  date = readStampReturnDate(filename, 0);
-  d = date / 1000000;
-  date = date % 1000000;
-  m = date / 10000;
-  date = date % 10000;
-  y = date;
-  return d;
-}//
-//////////////////////////////////////////////
-unsigned int processTimetoMonth(char* filename) {
-  long unsigned date;
-  unsigned int d, m, y;
-  date = readStampReturnDate(filename, 0);
-  d = date / 1000000;
-  date = date % 1000000;
-  m = date / 10000;
-  date = date % 10000;
-  y = date;
-  return m;
-}//
-//////////////////////////////////////////////
-unsigned int processTimetoYear(char* filename) {
-  long unsigned date;
-  unsigned int d, m, y;
-  date = readStampReturnDate(filename, 0);
-  d = date / 1000000;
-  date = date % 1000000;
-  m = date / 10000;
-  date = date % 10000;
-  y = date;
-  return y;
-}//
-//////////////////////////////////////////////
-unsigned int processTimetoHour(char* filename) {
-  long unsigned time;
-  unsigned int h, m, s;
-  time = readStampReturnTime(filename, 0);
-  h = time / 10000;
-  time = time % 10000;
-  m = time / 100;
-  time = time % 100;
-  s = time ;
-  return h;
-}//
-//////////////////////////////////////////////
-unsigned int processTimetoMin(char* filename) {
-  long unsigned time;
-  unsigned int h, m, s;
-  time = readStampReturnTime(filename, 0);
-  h = time / 10000;
-  time = time % 10000;
-  m = time / 100;
-  time = time % 100;
-  s = time ;
-  return m;
-}//
-//////////////////////////////////////////////
-unsigned int processTimetoSec(char* filename) {
-  long unsigned time;
-  unsigned int h, m, s;
-  time = readStampReturnTime(filename, 0);
-  h = time / 10000;
-  time = time % 10000;
-  m = time / 100;
-  time = time % 100;
-  s = time ;
-  return s;
-}//
-//////////////////////////////////////////////
-

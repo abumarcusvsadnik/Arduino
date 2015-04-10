@@ -1,9 +1,9 @@
 void initLCD() { lcd.begin(16, 2);}
 
-int  displayRTCTimeToLCD(int tmHour, int tmMinute, int tmSecond, int tmDay, int tmMonth, int tmYear, boolean tformat) {
+int  displayRTCTimeToLCD(int tmHour, int tmMinute, int tmSecond, int tmDay, int tmMonth, int tmYear, int tformat,int debugid) {
  
   lcd.setCursor(0, 0);
-   if (tformat)
+   if (tformat==24)
   { // 24 Hours
     if (tmHour < 10)  {
       //lcd.print("0");
@@ -83,16 +83,29 @@ int  displayRTCTimeToLCD(int tmHour, int tmMinute, int tmSecond, int tmDay, int 
   //Year
   lcd.print(tmYear);
   //////////////////////////////////////// 
+  
+    //////////////////////////////////////// 
+  if(debugid!=0){
+   Serial.print("debugid"); 
+   Serial.println(debugid); 
+   Serial.print("displayRTCTimeToLCD(,,,)");  
+   Serial.println("input values");     
+   Serial.println("output values");            
+  }
+  //////////////////////////////////////// 
+  
+  
+  
   return 0;
 }//displayRTCTimeToLCD
 
 
-int  displayRTCTimeToLCD(boolean tformat) {
+int  displayRTCTimeToLCD(int tformat,int debugid) {
   ////////////////////////////////////////
   ////////////////////////////////////////
   DateTime now = rtc.now();
   lcd.setCursor(0, 0);
-   if (tformat)
+   if (tformat==24)
   { // 24 Hours
     if (now.hour() < 10)  {
       //lcd.print("0");
@@ -177,6 +190,19 @@ int  displayRTCTimeToLCD(boolean tformat) {
   lcd.print(now.year());
 
   //////////////////////////////////////// 
+  if(debugid!=0){
+   Serial.print("debugid"); 
+   Serial.println(debugid); 
+   Serial.print("displayRTCTimeToLCD(,,)");  
+   Serial.println("input values");     
+   Serial.println("output values");            
+  }
+  //////////////////////////////////////// 
+  
+  
+  
+  
+  
   return 0;
 }//displayRTCTimeToLCD
 

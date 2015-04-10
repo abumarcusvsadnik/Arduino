@@ -11,7 +11,7 @@ SdFile root;
 
 
 
-void SDtest() {
+void SDtest(int debugid) {
    Serial.println("<!--------------------------------------------------------!>");
    Serial.print("\nInitializing SD card...");
 
@@ -79,13 +79,24 @@ void SDtest() {
   // list all files in the card with date and size
   root.ls(LS_R | LS_DATE | LS_SIZE);
   Serial.println("<!--------------------------------------------------------!>");
+  
+   ////////////////////////////////////////
+   if (debugid != 0) {
+ 
+    Serial.print("debugid"); 
+   Serial.println(debugid); 
+   Serial.print("SDtest(,,)");  
+      Serial.println("input values");
+      Serial.println("output values");
+    }
+  ////////////////////////////////////////
 
 
 
 }//END
 
 
-void SDreadFileContent(char* filename) {
+void SDreadFileContent(char* filename, int debugid) {
   SD.begin(chipSelect);
 
 
@@ -116,10 +127,25 @@ void SDreadFileContent(char* filename) {
   }
 Serial.println("<!--------------------------------------------------------!>");
 
+   ////////////////////////////////////////
+  if (debugid != 0) {
+
+   Serial.print("debugid"); 
+   Serial.println(debugid); 
+   Serial.print("SDreadFileContent(,,)");  
+      Serial.println("input values");
+      Serial.println("output values");
+    }
+  ////////////////////////////////////////
+
+
+
+
+
 }
 
 
-void SDcreateFile(char* filename, char* str) {
+void SDcreateFile(char* filename, char* str, int debugid) {
   SD.begin(chipSelect);
  
   File myFile = SD.open(filename, FILE_WRITE);
@@ -142,6 +168,20 @@ void SDcreateFile(char* filename, char* str) {
 
     Serial.println("<!--------------------------------------------------------!>");
 
+     ////////////////////////////////////////
+  if (debugid != 0) {
+
+   Serial.print("debugid"); 
+   Serial.println(debugid); 
+   Serial.print("SDcreateFile(,,)");  
+      Serial.println("input values");
+      Serial.println("output values");
+    }
+  ////////////////////////////////////////
+
+
+
+
 }
 
 
@@ -149,7 +189,7 @@ void SDcreateFile(char* filename, char* str) {
 
 
 
-void SDdelFile(char* filename) {
+void SDdelFile(char* filename, int debugid) {
   //File myFile = SD.open(filename);
   SD.begin(chipSelect);
   File myFile = SD.open(filename);
@@ -172,6 +212,20 @@ void SDdelFile(char* filename) {
     Serial.println(filename);
   }
     Serial.println("<!--------------------------------------------------------!>");
+
+       ////////////////////////////////////////
+  if (debugid != 0) {
+
+   Serial.print("debugid"); 
+   Serial.println(debugid); 
+   Serial.print("SDdelFile(,,)");  
+      Serial.println("input values");
+      Serial.println("output values");
+    }
+  ////////////////////////////////////////
+
+
+
 
 }//
 
