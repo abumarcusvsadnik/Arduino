@@ -1,6 +1,12 @@
 // Date and time functions using a DS1307 RTC connected via I2C and Wire lib
 #include <Wire.h>
 #include "RTClib.h"
+#include <LiquidCrystal.h>
+
+
+
+
+LiquidCrystal lcd(7, 6, 5, 8, 3, 2);
 
 RTC_DS1307 rtc;
 
@@ -8,6 +14,8 @@ void setup () {
   Serial.begin(57600);
   rtcInit();
   rtcSetNow();
+  initLCD();
+  
   char* filename = "DTStamp";
   
     createStampFile(filename,1);
@@ -37,7 +45,18 @@ void setup () {
     
     Serial.print("Year: ");
     Serial.println(y);      
+    
+ 
+    
+    
+    
+    
    
 }
 
-void loop(){}
+void loop(){
+
+     displayRTCTimeToLCD(1);
+
+
+}
