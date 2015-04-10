@@ -6,36 +6,24 @@ void addZero(int x) {
 //this routine add adding zero to an array hour if less than ten.
 int createStampFile(char* filename, int tmHour, int tmMinute, int tmSecond, int tmDay, int tmMonth, int tmYear, boolean debug) {
   //////////////////////////////////////////////////////////////////
-
   char Hour[3];
   char Minute[3];
   char Second[3];
-
   char Day[3];
   char Month[3];
   char Year[5];
-
   char stamp[14];
-
   //////////////////////////////////////////////////////////////////
-
   if (tmHour < 10) sprintf(Hour, "%c%d", '0', tmHour);
   else sprintf(Hour, "%d", tmHour);
-
-
   if (tmMinute < 10) sprintf(Minute, "%c%d", '0', tmMinute);
   else sprintf(Minute, "%d", tmMinute);
-
   if (tmSecond < 10) sprintf(Second, "%c%d", '0', tmSecond);
   else sprintf(Second, "%d", tmSecond);
-
   if (tmDay < 10) sprintf(Day, "%c%d", '0', tmDay);
   else sprintf(Day, "%d", tmDay);
-
-
   if (tmMonth < 10) sprintf(Month, "%c%d", '0', tmMonth);
   else sprintf(Month, "%d", tmMonth);
-
   if (tmYear < 10) sprintf(Year, "%c%d", '0', tmYear);
   else sprintf(Year, "%d", tmYear);
 
@@ -46,41 +34,26 @@ int createStampFile(char* filename, int tmHour, int tmMinute, int tmSecond, int 
     Serial.println("Debug Enabled");
     Serial.print("The Hour ");
     Serial.println(Hour);
-
     Serial.print("The Minute ");
     Serial.println(Minute);
-
     Serial.print("The Second ");
     Serial.println(Second);
-
     Serial.print("The Day ");
     Serial.println(Day);
-
     Serial.print("The Month ");
     Serial.println(Month);
-
-
     Serial.print("The Year ");
     Serial.println(Year);
-
     //concat all string into string stamp
     sprintf(stamp, "%s%s%s%s%s%s", Hour, Minute, Second, Day, Month, Year);
     Serial.print("Stamp value is ");
     Serial.println(stamp);
     Serial.println("<!--------------------------------------------------------!>");
   }//if(debug)
-
-
   SDdelFile("DTstamp");
   SDcreateFile("DTstamp", stamp);
-
-
   return 0;
-
-
 }
-
-
 
 int createStampFile(char* filename, boolean debug) {
   DateTime now = rtc.now();
@@ -88,36 +61,23 @@ int createStampFile(char* filename, boolean debug) {
   char Hour[3];
   char Minute[3];
   char Second[3];
-
   char Day[3];
   char Month[3];
   char Year[5];
-
-
   char stamp[14];
-
-
   //////////////////////////////////////////////////////////////////
   if (now.hour() < 10) sprintf(Hour, "%c%d", '0', now.hour());
   else sprintf(Hour, "%d", now.hour());
-
-
   if (now.minute() < 10) sprintf(Minute, "%c%d", '0', now.minute());
   else sprintf(Minute, "%d", now.minute());
-
   if (now.second() < 10) sprintf(Second, "%c%d", '0', now.second());
   else sprintf(Second, "%d", now.second());
-
   if (now.day() < 10) sprintf(Day, "%c%d", '0', now.day());
   else sprintf(Day, "%d", now.day());
-
-
   if (now.month() < 10) sprintf(Month, "%c%d", '0', now.month());
   else sprintf(Month, "%d", now.month());
-
   if (now.year() < 10) sprintf(Year, "%c%d", '0', now.year());
   else sprintf(Year, "%d", now.year());
-
   if (debug) {
     Serial.println("<!--------------------------------------------------------!>");
     Serial.println("(*)createStampFile2");
@@ -125,23 +85,16 @@ int createStampFile(char* filename, boolean debug) {
     Serial.println("Debug Enabled");
     Serial.print("The Hour ");
     Serial.println(Hour);
-
     Serial.print("The Minute ");
     Serial.println(Minute);
-
     Serial.print("The Second ");
     Serial.println(Second);
-
     Serial.print("The Day ");
     Serial.println(Day);
-
     Serial.print("The Month ");
     Serial.println(Month);
-
-
     Serial.print("The Year ");
     Serial.println(Year);
-
     //concat all string into string stamp
     sprintf(stamp, "%s%s%s%s%s%s", Hour, Minute, Second, Day, Month, Year);
     Serial.print("Stamp value is ");

@@ -7,7 +7,6 @@
 
 
 LiquidCrystal lcd(7, 6, 5, 8, 3, 2);
-
 RTC_DS1307 rtc;
 
 void setup () {
@@ -18,40 +17,28 @@ void setup () {
   
   char* filename = "DTStamp";
   
-    createStampFile(filename,1);
-    SDreadFileContent(filename);
+  createStampFile(filename,1);
+  SDreadFileContent(filename);
     
-    int h  = processTimetoHour(filename);
-    int m  = processTimetoMin(filename);
-    int s  = processTimetoSec(filename);
-    int d  = processTimetoDay(filename);
-    int mt = processTimetoMonth(filename);
-    int y  = processTimetoYear(filename);
+  int h  = processTimetoHour(filename);
+  int m  = processTimetoMin(filename);
+  int s  = processTimetoSec(filename);
+  int d  = processTimetoDay(filename);
+  int mt = processTimetoMonth(filename);
+  int y  = processTimetoYear(filename);
 
     Serial.print("Hour: ");
-    Serial.println(h);    
-    
+    Serial.println(h);  
     Serial.print("Minute: ");
-    Serial.println(m);        
- 
-     Serial.print("Second: ");
-    Serial.println(s);    
-    
+    Serial.println(m);  
+    Serial.print("Second: ");
+    Serial.println(s);  
     Serial.print("Day: ");
-    Serial.println(d);      
- 
-     Serial.print("Month: ");
-    Serial.println(mt);    
-    
+    Serial.println(d);
+    Serial.print("Month: ");
+    Serial.println(mt); 
     Serial.print("Year: ");
     Serial.println(y);      
-    
- 
-    
-    
-    
-    
-   
 }
 
 void loop(){
