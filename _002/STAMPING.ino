@@ -3,8 +3,90 @@ void addZero(int x){
  if(x<10)Serial.print("0");   
 }
 ///////////////////////////////////////////////////////////////////
+/*
+//!--------------------------------------------------------------------------------------------!//  
+  int readStampReturnHour(char* filename) {
+  SD.begin(chipSelect);
+  int i,t0,t1,t2,t3,t4,t5,t6,t7,t8,
+  word t9,t10;
+  byte t11,t12,t13;
+
+  // re-open the file for reading:
+  File myFile = SD.open(filename);
+  int stamp[13];
+  if (myFile) {
+    
+    Serial.println("<!--------------------------------------------------------!>");
+    Serial.println("(*)readStampReturntmHour()");
+
+    Serial.print("\tFilename\t: ");
+    Serial.println(filename);
+    
+    // read from the file until there's nothing else in it:
+    
+
+   i = 0;
+   while(myFile.available()){   
+    stamp[i] = myFile.read();   
+    i++;
+   }
+    
+
+    // close the file:
+    myFile.close();
+
+  } else {
+    // if the file didn't open, print an error:
+    Serial.print("\nerror opening\t");
+    Serial.println(filename);
+    Serial.println();
+  }
+
+Serial.println("\n\nHour Value is: ");
+for(i=0;i  <= 13 ;i++){
+
+Serial.print("Stamp[");
+Serial.print(i);
+Serial.print("] = [");
+Serial.print(stamp[i]);
+Serial.print("]");
+Serial.println("");
+}
+
+Serial.println();
+Serial.println("<!--------------------------------------------------------!>");
+
+t0 = asciitodec(stamp[0])*10000000000000;       
+t1 = asciitodec(stamp[1])*1000000000000;  
+t2 = asciitodec(stamp[2])*100000000000;       
+t3 = asciitodec(stamp[3])*10000000000;  
+t4 = asciitodec(stamp[4])*1000000000;       
+t5 = asciitodec(stamp[5])*100000000;  
+t6 = asciitodec(stamp[6])*10000000;       
+t7 = asciitodec(stamp[7])*1000000;  
+t8 = asciitodec(stamp[8])*100000;       
+t9 = asciitodec(stamp[9])*10000;  
+t10 = asciitodec(stamp[10])*1000;       
+t11 = asciitodec(stamp[11])*100;  
+t12 = asciitodec(stamp[12])*10;       
+t13 = asciitodec(stamp[13]);  
+        
+  t = t0+t1+t2+t3+t4+t5+t6+t7+t8+t9+10+t11+t12+t13;
+  
+        Serial.print("t ");
+        Serial.println(t);        
+        
+        
+        
+        return t;
+
+}//end function
+//!--------------------------------------------------------------------------------------------!//
+*/
+
+
 //this routine add adding zero to an array hour if less than ten.
-int createStampFile(int tmHour, int tmMinute, int tmSecond, int tmDay, int tmMonth, int tmYear, boolean debug){      
+int createStampFile(char* filename, int tmHour, int tmMinute, int tmSecond, int tmDay, int tmMonth, int tmYear, boolean debug){      
 	//////////////////////////////////////////////////////////////////
 
         char Hour[3];
@@ -82,7 +164,7 @@ int createStampFile(int tmHour, int tmMinute, int tmSecond, int tmDay, int tmMon
   
   
   
-  int createStampFile(boolean debug){       
+  int createStampFile(char* filename, boolean debug){       
         
         
         DateTime now = rtc.now();
@@ -155,22 +237,220 @@ int createStampFile(int tmHour, int tmMinute, int tmSecond, int tmDay, int tmMon
         }//if(debug)
 
         
-        SDdelFile("DTstamp");
-        SDcreateFile("DTstamp",stamp);
-        SDreadFileContent("DTstamp");
+        SDdelFile(filename);
+        SDcreateFile(filename,stamp);
+        SDreadFileContent(filename);
         
 
          return 0;
 
 
-  }
-  
+  }//createstampfile
   
   
 //!--------------------------------------------------------------------------------------------!//  
-  int readStampReturntmHour(char* filename) {
+  long unsigned readStampReturnTime(char* filename, bool debug) {
   SD.begin(chipSelect);
-  int i,h, h0, h1, h2;
+  byte i;
+
+  // re-open the file for reading:
+  File myFile = SD.open(filename);
+  int stamp[13];
+  if (myFile) {
+    
+    Serial.println("<!--------------------------------------------------------!>");
+    Serial.println("(*)readStampReturnTime()");
+
+    Serial.print("\tFilename\t: ");
+    Serial.println(filename);
+    
+    // read from the file until there's nothing else in it:
+    
+
+   i = 0;
+   while(myFile.available()){   
+    stamp[i] = myFile.read();   
+    i++;
+   }
+    
+
+    // close the file:
+    myFile.close();
+
+  } else {
+    // if the file didn't open, print an error:
+    Serial.print("\nerror opening\t");
+    Serial.println(filename);
+    Serial.println();
+  }
+
+if(debug){
+Serial.println("\n\nHour Value is: ");
+for(i=0;i  <= 13 ;i++){
+
+Serial.print("Stamp[");
+Serial.print(i);
+Serial.print("] = [");
+Serial.print(stamp[i]);
+Serial.print("]");
+Serial.println("");
+}//debug
+}//debug
+
+
+Serial.println();
+Serial.println("<!--------------------------------------------------------!>");
+
+
+//unsinged long 2,147,483,647
+//word/unsigned int 65,535
+//byte 0-255
+unsigned long          t0 = asciitodec(stamp[0])*100000;  
+unsigned int           t1 = asciitodec(stamp[1])*10000;   
+unsigned int           t2 = asciitodec(stamp[2])*1000;       
+unsigned int           t3 = asciitodec(stamp[3])*100;  
+byte                   t4 = asciitodec(stamp[4])*10;       
+byte                   t5 = asciitodec(stamp[5]);  
+
+
+                
+        
+                 long unsigned tmp = t0+t1+t2+t3+t4+t5;
+        
+                  if(debug){
+                  
+                  Serial.print("h0 ");
+                  Serial.println(t0);        
+                  Serial.print("h1 ");
+                  Serial.println(t1);        
+                  Serial.print("m0 ");
+                  Serial.println(t2);        
+                  Serial.print("m1 ");
+                  Serial.println(t3);        
+                  Serial.print("s0 ");
+                  Serial.println(t4);        
+                  Serial.print("s1 ");
+                  Serial.println(t5);   
+                  Serial.print("returned value ");
+                  Serial.println(tmp);   
+                  
+                  SDreadFileContent(filename);   
+                  }      
+                  
+                  return tmp;
+
+}//end function
+//!--------------------------------------------------------------------------------------------!//
+
+//!--------------------------------------------------------------------------------------------!//  
+  long unsigned  readStampReturnDate(char* filename, bool debug) {
+  SD.begin(chipSelect);
+  byte i;
+
+  // re-open the file for reading:
+  File myFile = SD.open(filename);
+  int stamp[14];
+  if (myFile) {
+    
+    Serial.println("<!--------------------------------------------------------!>");
+    Serial.println("(*)readStampReturnTime()");
+
+    Serial.print("\tFilename\t: ");
+    Serial.println(filename);
+    
+    // read from the file until there's nothing else in it:
+    
+
+   i = 0;
+   while(myFile.available()){   
+    stamp[i] = myFile.read();   
+    i++;
+   }
+    
+
+    // close the file:
+    myFile.close();
+
+  } else {
+    // if the file didn't open, print an error:
+    Serial.print("\nerror opening\t");
+    Serial.println(filename);
+    Serial.println();
+  }
+
+if(debug){
+Serial.println("\n\nHour Value is: ");
+for(i=0;i  <= 13 ;i++){
+
+Serial.print("Stamp[");
+Serial.print(i);
+Serial.print("] = [");
+Serial.print(stamp[i]);
+Serial.print("]");
+Serial.println("");
+}//debug
+}//debug
+
+
+Serial.println();
+Serial.println("<!--------------------------------------------------------!>");
+
+
+//unsinged long 2,147,483,647
+//word/unsigned int 65,535
+//byte 0-255
+
+long unsigned       t6 = asciitodec(stamp[6])  *10000000;   
+long unsigned       t7 = asciitodec(stamp[7])  *1000000;       
+unsigned long          t8 = asciitodec(stamp[8])  *100000;   
+unsigned int           t9 = asciitodec(stamp[9])  *10000;       
+unsigned int           t10= asciitodec(stamp[10]) *1000;  
+unsigned int           t11 = asciitodec(stamp[11])*100;       
+byte                   t12 = asciitodec(stamp[12])*10;  
+byte                   t13 = asciitodec(stamp[13]);  
+
+
+
+                
+        
+                 unsigned long tmp = t6+t7+t8+t9+t10+t11+t12+t13;
+        
+                  if(debug){
+                  
+                  Serial.print("t6 ");
+                  Serial.println(t6);        
+                  Serial.print("t7 ");
+                  Serial.println(t7);        
+                  Serial.print("t8 ");
+                  Serial.println(t8);        
+                  Serial.print("t9 ");
+                  Serial.println(t9);        
+                  Serial.print("t10 ");
+                  Serial.println(t10);        
+                  Serial.print("t11 ");
+                  Serial.println(t11);   
+                  Serial.print("t12 ");
+                  Serial.println(t12);   
+                  Serial.print("t13 ");
+                  Serial.println(t13);   
+                  
+                  
+                  Serial.print("returned value ");
+                  Serial.println(tmp);   
+                  
+                  SDreadFileContent(filename);   
+                  }      
+                  
+                  return tmp;
+
+}//end function
+//!--------------------------------------------------------------------------------------------!//  
+  
+  
+//!--------------------------------------------------------------------------------------------!//  
+  byte unsigned readStampReturnHour(char* filename, bool debug) {
+  SD.begin(chipSelect);
+  byte unsigned i,tmp,tmp0,tmp1,tmp2;
 
   // re-open the file for reading:
   File myFile = SD.open(filename);
@@ -219,21 +499,23 @@ Serial.println("<!--------------------------------------------------------!>");
 
 
 
-h0 = asciitodec(stamp[0]);       
-h1 = asciitodec(stamp[1]);  
+tmp0 = asciitodec(stamp[0])*10;       
+tmp1 = asciitodec(stamp[1]);  
         
-        h2 = h0*10 + h1*1;
+        tmp = tmp0 + tmp1;
         
-        Serial.print("h0 ");
-        Serial.println(h0);        
-        Serial.print("h1 ");
-        Serial.println(h1);        
-        Serial.print("h2 ");
-        Serial.println(h2);        
+        if(debug){
         
+        Serial.print("tmp0 ");
+        Serial.println(tmp0);        
+        Serial.print("tmp1 ");
+        Serial.println(tmp1);        
+        Serial.print("tmp ");
+        Serial.println(tmp);        
+        SDreadFileContent(filename);   
+        }      
         
-        
-        return h2;
+        return tmp;
 
 }//end function
 //!--------------------------------------------------------------------------------------------!//

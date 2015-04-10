@@ -19,14 +19,18 @@ rtcSetNow();
 //rtcSetNow(2078,2,23,0,5,8);
 //converttosec(0,0,0,32,1);
 
+
+unsigned long long i=600851475143;
+printf("%llu",i);
+
 //SDdelFile("DTStamp"); 
 //SDcreateFile("DTStamp","hello"); 
-createStampFile2(1);
+//createStampFile2(1);
 
-readStampReturnString("DTStamp");
+//readStampReturnString("DTStamp");
 
 
-SDreadFileContent("DTStamp");
+//SDreadFileContent("DTStamp");
 
 
 }
