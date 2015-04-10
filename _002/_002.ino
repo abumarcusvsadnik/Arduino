@@ -1,5 +1,4 @@
 // Date and time functions using a DS1307 RTC connected via I2C and Wire lib
-
 #include <Wire.h>
 #include "RTClib.h"
 
@@ -11,52 +10,34 @@ void setup () {
   rtcSetNow();
   char* filename = "DTStamp";
   
-    //createStampFile(filename,1);
-    readStampReturnHour(filename,1);
-    long unsigned time,date;
+    createStampFile(filename,1);
+    SDreadFileContent(filename);
     
-    
-    time = readStampReturnTime(filename,0);
+    int h = processTimetoHour(filename);
+    int m = processTimetoMin(filename);
+    int s = processTimetoSec(filename);
+    int d = processTimetoDay(filename);
+    int mt = processTimetoMonth(filename);
+    int y = processTimetoYear(filename);
 
-    Serial.println("Before ");
-    Serial.println(time);
+    Serial.print("Hour: ");
+    Serial.println(h);    
     
-//    h = abs(time / 10000);
-    unsigned int h = time / 10000;    
-                 time = time % 10000;
-    
-    unsigned int m = time / 100;        
-                 time = time % 100;
-                 
-    unsigned int s = time ;    
-
-    
-    
-    Serial.println("h ");
-    Serial.println(h);
-    
-    Serial.println("m ");
-    Serial.println(m);    
-    
-    Serial.println("s ");
+    Serial.print("Minute: ");
+    Serial.println(m);        
+ 
+     Serial.print("Second: ");
     Serial.println(s);    
     
+    Serial.print("Day: ");
+    Serial.println(d);      
+ 
+     Serial.print("Month: ");
+    Serial.println(mt);    
     
-    
-    
-    
-
-
-
-    
-    //readStampReturnDate(filename,1);
-  
-  
-  
-  
-  
+    Serial.print("Year: ");
+    Serial.println(y);      
+   
 }
 
-void loop () {
-    
-}
+void loop(){}

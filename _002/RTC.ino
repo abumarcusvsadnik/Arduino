@@ -34,6 +34,10 @@ DateTime now = rtc.now();
     Serial.print(now.month(), DEC);
 ///////////////////////////////////////////////////////////////////////
 */
+
+
+
+
 bool rtcInit()
 { 
   #ifdef AVR
