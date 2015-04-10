@@ -1,130 +1,72 @@
-
-
-const char *monthName[12] = {
-  "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
-};
-
-
-
-
-bool readRTCTime() {
-  Serial.println("<!--------------------------------------------------------!>");
-  if (RTC.read(tm)) {
-    Serial.print("Ok, Time = ");
-    print2digits(tm.Hour);
-    Serial.write(':');
-    print2digits(tm.Minute);
-    Serial.write(':');
-    print2digits(tm.Second);
-    Serial.print(", Date (D/M/Y) = ");
-    Serial.print(tm.Day);
-    Serial.write('/');
-    Serial.print(tm.Month);
-    Serial.write('/');
-    Serial.print(tmYearToCalendar(tm.Year));
-    Serial.println();
-  } else {
-    if (RTC.chipPresent()) {
-      Serial.println("The DS1307 is stopped.  Please run the SetTime");
-      Serial.println("example to initialize the time and begin running.");
-      Serial.println();
-    } else {
-      Serial.println("DS1307 read error!  Please check the circuitry.");
-      Serial.println();
-    }
-    delay(9000);
-  }
-  delay(1000);
-  Serial.println("<!--------------------------------------------------------!>");
-
+bool rtcInit(){
+ 
+ #ifdef AVR
+  Wire.begin();
+#else
+  Wire1.begin(); // Shield I2C pins connect to alt I2C bus on Arduino Due
+#endif
+  rtc.begin();      
+//   
+  return true;  
 }
 
 
-/////
-
-
-void print2digits(int number) {
-  if (number >= 0 && number < 10) {
-    Serial.write('0');
-  }
-  Serial.print(number);
-
-} //
-bool copySetPCTimetoRTCTime() {
-
-  bool parse = false;
-  bool config = false;
-
-
-
-  // get the date and time the compiler was run
-  if (getDate(__DATE__) && getTime(__TIME__)) {
-    parse = true;
-    // and configure the RTC with this info
-    if (RTC.write(tm)) {
-      config = true;
-    }
-  }
-
-
-  if (parse && config) {
-    Serial.print("DS1307 configured Time=");
-    Serial.print(__TIME__);
-    Serial.print(", Date=");
-    Serial.println(__DATE__);
-  } else if (parse) {
-    Serial.println("DS1307 Communication Error :-{");
-    Serial.println("Please check your circuitry");
-  } else {
-    Serial.print("Could not parse info from the compiler, Time=\"");
-    Serial.print(__TIME__);
-    Serial.print("\", Date=\"");
-    Serial.print(__DATE__);
-    Serial.println("\"");
-  }
-
-  return true;
-}//
-
-
-///////////////////////////////////////////////////////////////////
-
-
-
-//////////////////////////////////////////////////////////////////
 
 
 
 
-bool getTime(const char *str)
+
+
+unsigned long  converttosec(int Day,int Hour,int Minute,int Second, bool debug)
 {
-  int Hour, Min, Sec;
+ 
+    unsigned long  x = ((Day*86400) + (Hour*3600) + (Minute*60) + (Second));
+    
+    if(debug){
+      Serial.println("<!--------------------------------------------------------------------------!>");
+      Serial.println("Function Name: converttosec() ");
+      Serial.println("**********************");
+      Serial.println("Input*");
+      Serial.print("Variable Day: ");
+      Serial.println(Day);
+      Serial.print("Variable Hour: ");
+      Serial.println(Hour);
+      Serial.print("Variable Minute: ");
+      Serial.println(Minute);
+      Serial.print("Variable Second: ");
+      Serial.println(Second);
+      Serial.println("**********************");
+      Serial.println("Output*");          
+      Serial.print("Total Converted Seconds: ");
+      Serial.println(x);
+      Serial.println("<!--------------------------------------------------------------------------!>");
+    } 
+    return x;
+}  
 
-  if (sscanf(str, "%d:%d:%d", &Hour, &Min, &Sec) != 3) return false;
-  tm.Hour = Hour;
-  tm.Minute = Min;
-  tm.Second = Sec;
+ 
+
+
+bool rtcSetNow(int Year,int Month,int Day,int Hour,int Minute,int Second){
+       
+ if (rtc.isrunning()) {
+    //Serial.println("RTC is running!");
+    rtc.adjust(DateTime(Year, Month, Day, Hour, Minute, Second));
+  }  
   return true;
 }
 
-bool getDate(const char *str)
-{
-  char Month[12];
-  int Day, Year;
-  uint8_t monthIndex;
-
-  if (sscanf(str, "%s %d %d", Month, &Day, &Year) != 3) return false;
-  for (monthIndex = 0; monthIndex < 12; monthIndex++) {
-    if (strcmp(Month, monthName[monthIndex]) == 0) break;
-  }
-  if (monthIndex >= 12) return false;
-  tm.Day = Day;
-  tm.Month = monthIndex + 1;
-  tm.Year = CalendarYrToTm(Year);
+bool rtcSetNow(){
+       
+ if (rtc.isrunning()) {
+    //Serial.println("RTC is NOT running!");
+    // following line sets the RTC to the date & time this sketch was compiled
+    rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
+    // This line sets the RTC with an explicit date & time, for example to set
+    // January 21, 2014 at 3am you would call:    
+  }  
   return true;
 }
-
 
 
 

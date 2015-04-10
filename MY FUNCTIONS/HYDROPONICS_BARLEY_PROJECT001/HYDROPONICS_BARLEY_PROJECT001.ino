@@ -6,16 +6,22 @@
 
 //  include the RTC library:
     #include <Time.h>
-    #include <DS1307RTC.h>
+    //#include <DS1307RTC.h>
     #include <Wire.h>
+    
+    
+    #include "RTClib.h"
+    RTC_DS1307 rtc;
 
-tmElements_t tm;
+    
+
+    tmElements_t tm;
 
 
-LiquidCrystal lcd(7, 6, 5, 8, 3, 2);//LCD
+    LiquidCrystal lcd(7, 6, 5, 8, 3, 2);//LCD
 
 const int chipSelect = 53; // SD CLK
-// set up variables using the SD utility library functions:
+// set up variables using the SD utility library functions: 
 Sd2Card card;
 SdVolume volume;
 SdFile root;
@@ -50,12 +56,15 @@ SdFile root;
 
 
 void setup(){
-
+  
        Serial.begin(9600);
        while(!Serial);
-      // delay(3000);
-       lcd.begin(16, 2);//LCD       
+       
+       rtcInit();
+       rtcSetNow();  
+       
        pinMode(53, OUTPUT); //SD    // change this to 53 on a mega SD
+       lcd.begin(16, 2);//LCD
        
        int tmHour = 18;
        int tmMinute = 13;
@@ -68,16 +77,14 @@ void setup(){
        //readRTCTime();
        
        //SDtest(); //SD       
-       createStampFile( tmHour,  tmMinute,  tmSecond,  tmDay,  tmMonth,  tmYear,  true); //STAMPING
+       //createStampFile( tmHour,  tmMinute,  tmSecond,  tmDay,  tmMonth,  tmYear,  true); //STAMPING
       
        //createStampFile(true); //STAMPING
        //SDreadFile("DTstamp");
-       int h = readStampReturntmHour("DTstamp");
+       //int h = readStampReturntmHour("DTstamp");
        //SDdelFile("DTstamp");
-       Serial.print("return hour is ");
-       Serial.println(h);
-       
-       //SDtest(); //SD
+       // Serial.print("return hour is ");
+       // Serial.println(h);       
        
        
   
@@ -88,7 +95,7 @@ void setup(){
 void loop(){
 
 
-  displayRTCTimeToLCD(tm,0);
+ // displayRTCTimeToLCD(tm,0);
   
 
 

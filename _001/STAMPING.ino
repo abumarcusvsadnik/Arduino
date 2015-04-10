@@ -1,4 +1,18 @@
 
+
+
+///////////////////////////////////////////////////////////////////
+void addZero(int x){ 
+ if(x<10)Serial.print("0");   
+}
+///////////////////////////////////////////////////////////////////
+
+
+
+
+////////////////////////////////////////////
+
+
 //this routine add adding zero to an array hour if less than ten.
 int createStampFile(int tmHour, int tmMinute, int tmSecond, int tmDay, int tmMonth, int tmYear, boolean debug){      
 	//////////////////////////////////////////////////////////////////
@@ -81,7 +95,7 @@ int createStampFile(int tmHour, int tmMinute, int tmSecond, int tmDay, int tmMon
   int createStampFile(boolean debug){
     
         
-        RTC.read(tm);
+       
         
         
 

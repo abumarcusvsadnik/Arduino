@@ -1,4 +1,8 @@
-
+///////////////////////////////////////////////////////////////////
+void addZero(int x){ 
+ if(x<10)Serial.print("0");   
+}
+///////////////////////////////////////////////////////////////////
 //this routine add adding zero to an array hour if less than ten.
 int createStampFile(int tmHour, int tmMinute, int tmSecond, int tmDay, int tmMonth, int tmYear, boolean debug){      
 	//////////////////////////////////////////////////////////////////
@@ -78,13 +82,10 @@ int createStampFile(int tmHour, int tmMinute, int tmSecond, int tmDay, int tmMon
   
   
   
-  int createStampFile(boolean debug){
-    
-        
-        RTC.read(tm);
+  int createStampFile(boolean debug){       
         
         
-
+        DateTime now = rtc.now();
 
 	//////////////////////////////////////////////////////////////////
 
@@ -102,25 +103,25 @@ int createStampFile(int tmHour, int tmMinute, int tmSecond, int tmDay, int tmMon
 
 	//////////////////////////////////////////////////////////////////
 
-	if(tm.Hour < 10) sprintf(Hour,"%c%d",'0',tm.Hour);
-		else sprintf(Hour,"%d",tm.Hour);
+	if(now.hour() < 10) sprintf(Hour,"%c%d",'0',now.hour());
+		else sprintf(Hour,"%d",now.hour());
 
       
-	if(tm.Minute < 10) sprintf(Minute,"%c%d",'0',tm.Minute);
-		else sprintf(Minute,"%d",tm.Minute);
+	if(now.minute() < 10) sprintf(Minute,"%c%d",'0',now.minute());
+		else sprintf(Minute,"%d",now.minute());
 
-	if(tm.Second < 10) sprintf(Second,"%c%d",'0',tm.Second);
-		else sprintf(Second,"%d",tm.Second);
+	if(now.second() < 10) sprintf(Second,"%c%d",'0',now.second());
+		else sprintf(Second,"%d",now.second());
 
-	if(tm.Day < 10) sprintf(Day,"%c%d",'0',tm.Day);
-		else sprintf(Day,"%d",tm.Day);
+	if(now.day() < 10) sprintf(Day,"%c%d",'0',now.day());
+		else sprintf(Day,"%d",now.day());
 
 
-	if(tm.Month < 10) sprintf(Month,"%c%d",'0',tm.Month);
-		else sprintf(Month,"%d",tm.Month);
+	if(now.month() < 10) sprintf(Month,"%c%d",'0',now.month());
+		else sprintf(Month,"%d",now.month());
 
-	if(tmYearToCalendar(tm.Year) < 10) sprintf(Year,"%c%d",'0',tmYearToCalendar(tm.Year));
-			else sprintf(Year,"%d",tmYearToCalendar(tm.Year));      
+	if(now.year() < 10) sprintf(Year,"%c%d",'0',now.year());
+			else sprintf(Year,"%d",now.year());      
 
 	if(debug){
 	Serial.println("<!--------------------------------------------------------!>");
@@ -155,7 +156,8 @@ int createStampFile(int tmHour, int tmMinute, int tmSecond, int tmDay, int tmMon
 
         
         SDdelFile("DTstamp");
-        SDcreateFile("DTstamp", stamp);
+        SDcreateFile("DTstamp",stamp);
+        SDreadFileContent("DTstamp");
         
 
          return 0;
@@ -185,8 +187,7 @@ int createStampFile(int tmHour, int tmMinute, int tmSecond, int tmDay, int tmMon
     
 
    i = 0;
-   while(myFile.available()){
-   
+   while(myFile.available()){   
     stamp[i] = myFile.read();   
     i++;
    }
@@ -218,8 +219,7 @@ Serial.println("<!--------------------------------------------------------!>");
 
 
 
-h0 = asciitodec(stamp[0]);         
-        
+h0 = asciitodec(stamp[0]);       
 h1 = asciitodec(stamp[1]);  
         
         h2 = h0*10 + h1*1;
@@ -237,6 +237,7 @@ h1 = asciitodec(stamp[1]);
 
 }//end function
 //!--------------------------------------------------------------------------------------------!//
+
 
 
 unsigned long  converttosec(int Day,int Hour,int Minute,int Second, bool debug)
