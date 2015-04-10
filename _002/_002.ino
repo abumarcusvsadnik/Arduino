@@ -1,11 +1,18 @@
-// Date and time functions using a DS1307 RTC connected via I2C and Wire lib
-#include <Wire.h> 
-#include "RTClib.h"
-#include <LiquidCrystal.h>
+    // Date and time functions using a DS1307 RTC connected via I2C and Wire lib
+    #include <Wire.h> 
+    #include "RTClib.h"
+    #include <LiquidCrystal.h>
+    #include <SPI.h> 
+    #include <SD.h>
+    
+    
+    // set up variables using the SD utility library functions:
+    Sd2Card card;
+    SdVolume volume;
+    SdFile root;
 
 
-
-
+    const int chipSelect = 53; // SD CLK
     LiquidCrystal lcd(7, 6, 5, 8, 3, 2);
     RTC_DS1307 rtc;
 
