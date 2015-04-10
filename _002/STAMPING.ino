@@ -15,7 +15,7 @@ int createStampFile(char* filename, int tmHour, int tmMinute, int tmSecond, int 
   char Month[3];
   char Year[5];
 
-  char stamp[17];
+  char stamp[14];
 
   //////////////////////////////////////////////////////////////////
 
@@ -83,12 +83,8 @@ int createStampFile(char* filename, int tmHour, int tmMinute, int tmSecond, int 
 
 
 int createStampFile(char* filename, boolean debug) {
-
-
   DateTime now = rtc.now();
-
   //////////////////////////////////////////////////////////////////
-
   char Hour[3];
   char Minute[3];
   char Second[3];
@@ -98,11 +94,10 @@ int createStampFile(char* filename, boolean debug) {
   char Year[5];
 
 
-  char stamp[17];
+  char stamp[14];
 
 
   //////////////////////////////////////////////////////////////////
-
   if (now.hour() < 10) sprintf(Hour, "%c%d", '0', now.hour());
   else sprintf(Hour, "%d", now.hour());
 
@@ -153,26 +148,18 @@ int createStampFile(char* filename, boolean debug) {
     Serial.println(stamp);
     Serial.println("<!--------------------------------------------------------!>");
   }//if(debug)
-
-
   SDdelFile(filename);
   SDcreateFile(filename, stamp);
   SDreadFileContent(filename);
-
-
   return 0;
-
-
 }//createstampfile
-
-
 //!--------------------------------------------------------------------------------------------!//
 long unsigned readStampReturnTime(char* filename, bool debug) {
   SD.begin(chipSelect);
   byte i;
   // re-open the file for reading:
   File myFile = SD.open(filename);
-  int stamp[13];
+  int stamp[14];
   if (myFile) {
     Serial.println("<!--------------------------------------------------------!>");
     Serial.println("(*)readStampReturnTime()");

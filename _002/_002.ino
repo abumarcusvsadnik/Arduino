@@ -13,12 +13,12 @@ void setup () {
     createStampFile(filename,1);
     SDreadFileContent(filename);
     
-    int h = processTimetoHour(filename);
-    int m = processTimetoMin(filename);
-    int s = processTimetoSec(filename);
-    int d = processTimetoDay(filename);
+    int h  = processTimetoHour(filename);
+    int m  = processTimetoMin(filename);
+    int s  = processTimetoSec(filename);
+    int d  = processTimetoDay(filename);
     int mt = processTimetoMonth(filename);
-    int y = processTimetoYear(filename);
+    int y  = processTimetoYear(filename);
 
     Serial.print("Hour: ");
     Serial.println(h);    
