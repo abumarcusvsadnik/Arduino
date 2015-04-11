@@ -3,14 +3,12 @@
     #include "RTClib.h"
     #include <LiquidCrystal.h>
     #include <SPI.h> 
-    #include <SD.h>
-    
+    #include <SD.h>    
     
     // set up variables using the SD utility library functions:
     Sd2Card card;
     SdVolume volume;
     SdFile root;
-
 
     const int chipSelect = 53; // SD CLK
     LiquidCrystal lcd(7, 6, 5, 8, 3, 2);
