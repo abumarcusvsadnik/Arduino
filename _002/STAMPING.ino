@@ -288,7 +288,7 @@ long unsigned readStampReturnDate(char * filename, int debugid) {
     } //end function
 
 //////////////////////////////////////////////
-unsigned int processTimetoDay(char * filename, int debugid) {
+unsigned int processDatetoDay(char * filename, int debugid) {
         long unsigned date;
         unsigned int d, m, y;
         date = readStampReturnDate(filename, debugid);
@@ -311,7 +311,7 @@ unsigned int processTimetoDay(char * filename, int debugid) {
         return d;
     } //
     //////////////////////////////////////////////
-unsigned int processTimetoMonth(char * filename, int debugid) {
+unsigned int processDatetoMonth(char * filename, int debugid) {
         long unsigned date;
         unsigned int d, m, y;
         date = readStampReturnDate(filename, debugid);
@@ -333,7 +333,7 @@ unsigned int processTimetoMonth(char * filename, int debugid) {
         return m;
     } //
     //////////////////////////////////////////////
-unsigned int processTimetoYear(char * filename, int debugid) {
+unsigned int processDatetoYear(char * filename, int debugid) {
         long unsigned date;
         unsigned int d, m, y;
         date = readStampReturnDate(filename, debugid);
